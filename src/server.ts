@@ -1,15 +1,14 @@
-import express, { Request, Response } from 'express'
-import bodyParser from 'body-parser'
+import express from "express";
+import bodyParser from "body-parser";
+import userRoutes from "./routes/users";
+import { SERVER_PORT } from "./constants";
 
-const app: express.Application = express()
-const address: string = "0.0.0.0:3000"
+const app: express.Application = express();
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
-app.get('/', function (req: Request, res: Response) {
-    res.send('Hello World!')
-})
+app.use("/", userRoutes);
 
-app.listen(3000, function () {
-    console.log(`starting app on: ${address}`)
-})
+app.listen(SERVER_PORT, function () {
+    console.log(`starting app on: ${process.env.POSTGRES_HOST}:${SERVER_PORT}`);
+});
