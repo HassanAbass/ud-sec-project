@@ -43,7 +43,7 @@ export class OrderModel {
             );
 
             conn.release();
-            return { ...result.rows[0], product: orderProducts.rows };
+            return { ...result.rows[0], product: orderProducts.rows[0] };
         } catch (e) {
             throw new Error(`Couldn't insert into orders, ${e}`);
         }

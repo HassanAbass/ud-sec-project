@@ -20,7 +20,7 @@ export const show = async (req: Request, res: Response) => {
 export const create = async (req: Request, res: Response) => {
     res.json(
         await Product.create({
-            name: req.body.firstName,
+            name: req.body.name,
             price: req.body.price,
         })
     );

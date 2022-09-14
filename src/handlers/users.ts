@@ -4,9 +4,9 @@ import { UserModel } from "../models/User";
 
 const User = new UserModel();
 
-export const login = async (req: Request, res: Response) => {
-    res.json(await User.authenticate(req.body.firstName, req.body.password));
-};
+// export const login = async (req: Request, res: Response) => {
+//     res.json(await User.authenticate(req.body.firstName, req.body.password));
+// };
 export const index = async (req: Request, res: Response) => {
     res.json(await User.getUsers());
 };

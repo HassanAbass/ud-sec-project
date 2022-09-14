@@ -8,7 +8,7 @@ export const createProductMiddleware = (
     next: Function
 ) => {
     const data: string[] = [];
-    if (!req.body.firstName) data.push("firstName field is required");
+    if (!req.body.name) data.push("name field is required");
     if (!validateNumber(req.body.price))
         data.push("price field is required and must be a positive number");
     if (data.length) {

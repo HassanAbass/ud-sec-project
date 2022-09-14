@@ -34,7 +34,7 @@ export class ProductModel {
         }
     }
 
-    async create(product: ProductType): Promise<ProductType | void> {
+    async create(product: ProductType): Promise<ProductType> {
         try {
             const conn = await Client.connect();
             const result = await conn.query(

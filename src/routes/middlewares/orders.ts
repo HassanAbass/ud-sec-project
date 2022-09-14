@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ORDER_STATUS, VALIDATION_CODE } from "../../constants";
-import {validateNumber } from "../../helpers/request";
+import { validateNumber } from "../../helpers/request";
 
 export const createOrderMiddleware = (
     req: Request,
@@ -17,7 +17,9 @@ export const createOrderMiddleware = (
     if (!validateNumber(req.body.product_id))
         data.push("product_id field is required and must be a positive number");
     if (!validateNumber(req.body.product_quantity))
-        data.push("product_quantity field is required and must be a positive number");
+        data.push(
+            "product_quantity field is required and must be a positive number"
+        );
 
     if (data.length) {
         return res.status(VALIDATION_CODE).json(data);

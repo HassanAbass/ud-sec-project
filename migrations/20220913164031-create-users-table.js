@@ -34,8 +34,6 @@ exports.up = function(db) {
   })
   .then(function(data) {
     return db.runSql(data);
-  }).then(function(data) {
-    return db.runSql("insert into users(first_name, last_name, password) values('john', 'doe', '$2b$10$ToT2tbtcCoHLSjuch0rrceB6ScIXSpIsJy6eOzvTo4dfhlunTmCHG');");
   });
 };
 

@@ -12,5 +12,4 @@ class CustomProcessor extends DisplayProcessor {
 }
 import CustomReporter = jasmine.CustomReporter;
 
-
-jasmine.getEnv().addReporter((new SpecReporter() as unknown) as CustomReporter);
+jasmine.getEnv().addReporter(new SpecReporter() as unknown as CustomReporter);

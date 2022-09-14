@@ -2,14 +2,14 @@ import express from "express";
 import {
     createUserMiddleware,
     verifyAuthToken,
-    authenticateUserMiddleware,
+    // authenticateUserMiddleware,
 } from "./middlewares/user";
-import { login, index, show, create } from "../handlers/users";
+import { index, show, create } from "../handlers/users";
 const router = express.Router();
 
-router.post("/login", authenticateUserMiddleware, login);
+// router.post("/login", authenticateUserMiddleware, login);
 router.get("/", verifyAuthToken, index);
 router.get("/:id", verifyAuthToken, show);
-router.post("/", verifyAuthToken, createUserMiddleware, create);
+router.post("/", createUserMiddleware, create);
 
 export default router;

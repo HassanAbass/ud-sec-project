@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.get("/", index);
 router.get("/:id", show);
-router.post("/",verifyAuthToken, createProductMiddleware, create);
+router.post("/", verifyAuthToken, createProductMiddleware, create);
 
 export default router;
