@@ -32,10 +32,12 @@
     "@types/jsonwebtoken": "^8.5.9",
     "@types/pg": "^8.6.5",
     "@types/prettier": "^2.7.0",
+    "@types/supertest": "^2.0.12",
     "jasmine": "*",
-    "jasmine-spec-reporter": "*",
+    "jasmine-spec-reporter": "^7.0.0",
     "jasmine-ts": "*",
     "prettier": "^2.7.1",
+    "supertest": "^6.2.4",
     "ts-node": "*",
     "tsc-watch": "*"
   }

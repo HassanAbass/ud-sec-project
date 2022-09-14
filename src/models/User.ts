@@ -48,7 +48,7 @@ export class UserModel {
     ): Promise<string | null> {
         // @ts-ignore
         const conn = await Client.connect();
-        const sql = "SELECT password FROM users WHERE first_name=($1)";
+        const sql = "SELECT id, password FROM users WHERE first_name=($1)";
 
         const result = await conn.query(sql, [first_name]);
 

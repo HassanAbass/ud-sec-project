@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { VALIDATION_CODE } from "../constants";
 import { UserModel } from "../models/User";
 
 const User = new UserModel();
@@ -11,6 +12,11 @@ export const index = async (req: Request, res: Response) => {
 };
 
 export const show = async (req: Request, res: Response) => {
+    const id = req.params.id as unknown as number;
+    if (!id || isNaN(id))
+        return res
+            .status(VALIDATION_CODE)
+            .json("please input product id, must be an integer.");
     res.json(await User.show(req.params.id as unknown as number));
 };
 
