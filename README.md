@@ -11,7 +11,6 @@ $ create database storefront;
 # \c storefront
 $ GRANT ALL PRIVILEGES ON DATABASE storefront TO ud_user;
 ```
-Notice: the 
 
 ### 3. migrate
 - When users table migration start It will seed the data with a user whose `first_name`, `password` is `john`, `secret` so you can use the token for others uses endpoint as it is required to do so.
