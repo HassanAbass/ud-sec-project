@@ -54,7 +54,6 @@ export class UserModel {
 
         if (result.rows.length) {
             const user = result.rows[0];
-            console.log(user);
             if (
                 bcrypt.compareSync(
                     password + process.env.BCRYPT_PASSOWRD,
