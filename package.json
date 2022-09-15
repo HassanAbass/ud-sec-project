@@ -9,7 +9,7 @@
     "prettier": "prettier --config .prettierrc 'src/**/*.ts' --write",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
     "jasmine": "jasmine-ts",
-    "test": "ENV=test db-migrate --env test up && ENV=test jasmine && db-migrate down -c 4 && db-migrate reset",
+    "test": "ENV=test db-migrate --env test up && npm run build && ENV=test jasmine && db-migrate down -c 4 && db-migrate reset",
     "tsc": "tsc"
   },
   "author": "Hassan Abas",
