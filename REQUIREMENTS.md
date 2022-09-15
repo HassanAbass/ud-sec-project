@@ -17,24 +17,25 @@ The API accepts the endpoint body payload as json, users endpoints is tokenized 
 - Create `post /orders` user is determind using token [token required]
 ## Database schema 
 #### products
--  id
-- name
-- price
+-  id `integer`
+- name `varchar`
+- price `integer`
 
 #### users
-- id
-- first_name
-- last_name
-- password
+- id `integer`
+- first_name `varchar`
+- last_name `varchar`
+- password `varchar`
 
 #### orders
-- id
-- user_id
-- status
+- id `integer`
+- user_id `integer`
+- status `varchar`
 
 #### order_products
-- id
-- quantity
-- product_id
-- order_id
+- id `integer`
+- quantity `integer`
+- product_id `integer`
+- order_id `integer`
 
+![schema](schema.png)
