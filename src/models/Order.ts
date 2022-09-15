@@ -2,6 +2,7 @@ import { ORDER_STATUS } from "../constants";
 import Client from "../database";
 
 export type OrderType = {
+    id?: number;
     user_id: number;
     status: ORDER_STATUS;
     product_id?: number;
@@ -26,15 +27,54 @@ export class OrderModel {
         }
     }
 
-    async create(order: OrderType): Promise<OrderType | string> {
+    async remove(id: number): Promise<void> {
+        try {
+            //@ts-ignore
+            const conn = await Client.connect();
+            await conn.query("delete from orders where id=($1)", [id]);
+            conn.release();
+        } catch (err) {
+            throw new Error(`unable to delete order: ${err}`);
+        }
+    }
+
+    async show(
+        id: number
+    ): Promise<{ id: number; user_id: number; status: ORDER_STATUS }> {
+        try {
+            const conn = await Client.connect();
+            const result = await conn.query(
+                "SELECT * FROM orders where id=($1)",
+                [id]
+            );
+            conn.release();
+            return result.rows[0];
+        } catch (e) {
+            throw new Error(`Couldn't get order, ${e}`);
+        }
+    }
+
+    async update(id: number, status: ORDER_STATUS): Promise<OrderType> {
+        try {
+            //@ts-ignore
+            const conn = await Client.connect();
+            const sql =
+                "update orders set status=($2) where id =($1) RETURNING *";
+            const result = await conn.query(sql, [id, status]);
+            conn.release();
+            return result.rows[0];
+        } catch (err) {
+            throw new Error(`unable to update order: ${err}`);
+        }
+    }
+
+    async create(order: OrderType): Promise<OrderType> {
         try {
             const conn = await Client.connect();
             const product = await conn.query(
                 `select id from products where id=($1)`,
                 [order.product_id]
             );
-            if (!product.rowCount)
-                return "This product doesn't exist, enter a valid product id";
             const result = await conn.query(
                 `insert into orders(status, user_id) values('${order.status}', ${order.user_id}) RETURNING *`
             );

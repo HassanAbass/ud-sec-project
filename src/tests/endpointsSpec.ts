@@ -54,6 +54,44 @@ describe("Test users endpoints", () => {
         });
     });
 
+    it("Check update user by id endpoint", async () => {
+        const result = await request.post("/users").send({
+            firstName: "new",
+            lastName: "user",
+            password: "123",
+        });
+        let newUser = result.body;
+        const response = await request
+            .put(`/users/${newUser.id}`)
+            .send({
+                firstName: "new firstname",
+                lastName: "new lastname",
+            })
+            .set("Authorization", `Bearer ${newUser.token}`);
+        expect(response.body).toEqual({
+            id: newUser.id,
+            first_name: "new firstname",
+            last_name: "new lastname",
+            password: newUser.password,
+        });
+    });
+
+    it("Check delete user by id endpoint", async () => {
+        const result = await request.post("/users").send({
+            firstName: "new",
+            lastName: "user",
+            password: "123",
+        });
+        let newUser = result.body;
+        await request
+            .delete(`/users/${newUser.id}`)
+            .set("Authorization", `Bearer ${newUser.token}`);
+        const response = await request
+            .get(`/users/${newUser.id}`)
+            .set("Authorization", `Bearer ${user.token}`);
+        expect(response.body).toBe("");
+    });
+
     it("Validate number is positive, non zero", async () => {
         expect(validateNumber("-1")).toEqual(false);
         expect(validateNumber("0")).toEqual(false);
@@ -104,8 +142,46 @@ describe("Test products endpoints", () => {
             price: product.price,
         });
     });
-});
+    it("Check update product by id endpoint", async () => {
+        const result = await request
+            .post("/products")
+            .set("Authorization", `Bearer ${user.token}`)
+            .send({
+                name: "cool",
+                price: 255,
+            });
+        let newProduct = result.body;
+        const response = await request
+            .put(`/products/${newProduct.id}`)
+            .send({
+                name: "new name",
+                price: 255,
+            })
+            .set("Authorization", `Bearer ${user.token}`);
+        expect(response.body).toEqual({
+            id: newProduct.id,
+            name: "new name",
+            price: 255,
+        });
+    });
 
+    it("Check delete Product", async () => {
+        const result = await request
+            .post("/products")
+            .set("Authorization", `Bearer ${user.token}`)
+            .send({
+                name: "coosdl",
+                price: 255,
+            });
+        let newProduct = result.body;
+        await request
+            .delete(`/products/${newProduct.id}`)
+            .set("Authorization", `Bearer ${user.token}`);
+        const response = await request.get(`/products/${newProduct.id}`);
+        expect(response.body).toBe("");
+    });
+});
+export let order: OrderType & { id: number };
 describe("Test orders endpoints", () => {
     it("Check create orders endpoint", async () => {
         const response = await request
@@ -116,6 +192,7 @@ describe("Test orders endpoints", () => {
                 product_quantity: 4,
             })
             .set("Authorization", `Bearer ${user.token}`);
+        order = response.body;
         expect(response.status).toBe(SUCCESS_STATUS);
     });
 
@@ -124,5 +201,55 @@ describe("Test orders endpoints", () => {
             .get("/orders")
             .set("Authorization", `Bearer ${user.token}`);
         expect(response.status).toBe(SUCCESS_STATUS);
+    });
+    it("Check order by id endpoint", async () => {
+        const response = await request
+            .get(`/orders/${order.id}`)
+            .set("Authorization", `Bearer ${user.token}`);
+        expect(response.body).toEqual({
+            id: order.id,
+            user_id: order.user_id,
+            status: order.status,
+        });
+    });
+    it("Check update order by id endpoint", async () => {
+        const result = await request
+            .post("/orders")
+            .set("Authorization", `Bearer ${user.token}`)
+            .send({
+                status: ORDER_STATUS.ACTIVE,
+                product_id: product.id,
+                product_quantity: 4,
+                user_id: user.id,
+            });
+        let newOrder = result.body;
+        const response = await request
+            .put(`/orders/${newOrder.id}`)
+            .send({ status: ORDER_STATUS.COMPLETED })
+            .set("Authorization", `Bearer ${user.token}`);
+        expect(response.body).toEqual({
+            id: newOrder.id as number,
+            user_id: newOrder.user_id,
+            status: ORDER_STATUS.COMPLETED,
+        });
+    });
+    it("Check delete order", async () => {
+        const result = await request
+            .post("/orders")
+            .set("Authorization", `Bearer ${user.token}`)
+            .send({
+                status: ORDER_STATUS.ACTIVE,
+                product_id: product.id,
+                product_quantity: 4,
+                user_id: user.id,
+            });
+        let newOrder = result.body;
+        await request
+            .delete(`/orders/${newOrder.id}`)
+            .set("Authorization", `Bearer ${user.token}`);
+        const response = await request
+            .get(`/orders/${newOrder.id}`)
+            .set("Authorization", `Bearer ${user.token}`);
+        expect(response.body).toBe("");
     });
 });

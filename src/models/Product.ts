@@ -1,6 +1,7 @@
 import Client from "./../database";
 
 export type ProductType = {
+    id?: number;
     name: String;
     price: number;
 };
@@ -17,7 +18,36 @@ export class ProductModel {
         }
     }
 
-    async show(id: number): Promise<ProductType | null> {
+    async update(
+        id: number,
+        name: string,
+        price: number
+    ): Promise<ProductType> {
+        try {
+            //@ts-ignore
+            const conn = await Client.connect();
+            const sql =
+                "update products set name=($2), price=($3) where id =($1) RETURNING *";
+            const result = await conn.query(sql, [id, name, price]);
+            conn.release();
+            return result.rows[0];
+        } catch (err) {
+            throw new Error(`unable to update products: ${err}`);
+        }
+    }
+
+    async remove(id: number): Promise<void> {
+        try {
+            //@ts-ignore
+            const conn = await Client.connect();
+            await conn.query("delete from products where id=($1)", [id]);
+            conn.release();
+        } catch (err) {
+            throw new Error(`unable to delete product: ${err}`);
+        }
+    }
+
+    async show(id: number): Promise<ProductType> {
         try {
             const conn = await Client.connect();
             const result = await conn.query(
@@ -25,10 +55,7 @@ export class ProductModel {
                 [id]
             );
             conn.release();
-            if (result.rows.length) {
-                return result.rows[0];
-            }
-            return null;
+            return result.rows[0];
         } catch (e) {
             throw new Error(`Couldn't get products, ${e}`);
         }

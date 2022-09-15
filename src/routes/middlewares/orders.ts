@@ -26,3 +26,26 @@ export const createOrderMiddleware = (
     }
     next();
 };
+
+export const updateOrderMiddleware = (
+    req: Request,
+    res: Response,
+    next: Function
+) => {
+    const id = req.params.id as unknown as number;
+    if (!id || isNaN(id))
+        return res
+            .status(VALIDATION_CODE)
+            .json("please input order id, must be an integer.");
+    const data: string[] = [];
+    if (!req.body.status || !(req.body.status in ORDER_STATUS))
+        data.push(
+            `status field is required, and must be in ${Object.values(
+                ORDER_STATUS
+            )}`
+        );
+    if (data.length) {
+        return res.status(VALIDATION_CODE).json(data);
+    }
+    next();
+};

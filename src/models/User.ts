@@ -24,7 +24,7 @@ export class UserModel {
             conn.release();
             return result.rows;
         } catch (err) {
-            throw new Error(`unable get users: ${err}`);
+            throw new Error(`unable to get users: ${err}`);
         }
     }
 
@@ -40,37 +40,38 @@ export class UserModel {
             conn.release();
             return result.rows[0];
         } catch (err) {
-            throw new Error(`unable get users: ${err}`);
+            throw new Error(`unable to get user: ${err}`);
         }
     }
 
-    // async authenticate(
-    //     first_name: string,
-    //     password: string
-    // ): Promise<string | null> {
-    //     // @ts-ignore
-    //     const conn = await Client.connect();
-    //     const sql = "SELECT id, password FROM users WHERE first_name=($1)";
+    async update(
+        id: number,
+        first_name: string,
+        last_name: string
+    ): Promise<UserType> {
+        try {
+            //@ts-ignore
+            const conn = await Client.connect();
+            const sql =
+                "update users set first_name=($2), last_name=($3) where id =($1) RETURNING *";
+            const result = await conn.query(sql, [id, first_name, last_name]);
+            conn.release();
+            return result.rows[0];
+        } catch (err) {
+            throw new Error(`unable to update users: ${err}`);
+        }
+    }
 
-    //     const result = await conn.query(sql, [first_name]);
-
-    //     if (result.rows.length) {
-    //         const user = result.rows[0];
-    //         if (
-    //             bcrypt.compareSync(
-    //                 password + process.env.BCRYPT_PASSOWRD,
-    //                 user.password
-    //             )
-    //         ) {
-    //             return jwt.sign(
-    //                 { user: user },
-    //                 process.env.JSON_SECRET as jwt.Secret
-    //             );
-    //         }
-    //     }
-
-    //     return null;
-    // }
+    async remove(id: number): Promise<void> {
+        try {
+            //@ts-ignore
+            const conn = await Client.connect();
+            await conn.query("delete from users where id=($1)", [id]);
+            conn.release();
+        } catch (err) {
+            throw new Error(`unable to delete users: ${err}`);
+        }
+    }
 
     async create(u: UserType): Promise<UserType> {
         try {
