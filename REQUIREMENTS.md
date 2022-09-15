@@ -5,16 +5,21 @@ The API accepts the endpoint body payload as json, users endpoints is tokenized 
 - Index `get /products` 
 - Show `get /products/:id` :id represent a precreated product id
 - Create `post /products` [token required]
- 
+- Update `put /products/:id`
+- Delete `delete /products/:id`
 
 #### Users
 - Index `get /users` [token required]
 - Show `get /users/:id` :id represent precreated user id [token required]
 - Create `post /users` [token required]
-- Login `post /users/login`
+- Update `put /users/:id`
+- Delete `delete /users/:id`
 #### Orders
 - Index `get /orders` [token required] get order for specific user, user is determined using token
 - Create `post /orders` user is determind using token [token required]
+- Show `get /orders/:id`
+- Update `put /orders/:id`
+- Delete `delete /orders/:id`
 ## Database schema 
 #### products
 -  id `integer`
